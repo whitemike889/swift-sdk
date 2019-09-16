@@ -1,0 +1,11 @@
+module libogg {
+    header "Source/SupportingFiles/Dependencies/Libraries/libogg.a"
+    link "libogg"
+    export *
+}
+
+module libopus {
+    header "Source/SupportingFiles/Dependencies/Libraries/libopus.a"
+    link "libopus"
+    export *
+}

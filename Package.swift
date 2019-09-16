@@ -42,7 +42,9 @@ let package = Package(
         .library(name: "VisualRecognitionV3", targets: ["VisualRecognitionV3"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/watson-developer-cloud/restkit.git", from: "3.0.0")
+        .package(url: "https://github.com/watson-developer-cloud/restkit.git", .branch("preview/4.0.0-rc1")),
+        .package(url: "./libogg", .branch("master")),
+        .package(url: "./libopus", .branch("master")),
     ],
     targets: [
         .target(name: "AssistantV1", dependencies: ["RestKit"]),
@@ -67,3 +69,21 @@ let package = Package(
         .testTarget(name: "VisualRecognitionV3Tests", dependencies: ["VisualRecognitionV3"]),
     ]
 )
+
+#if !os(Linux)
+let SpeechToTextV1Library: Product = .library(name: "SpeechtoTextV1", targets: ["SpeechToTextV1"])
+let TextToSpeechV1Library: Product = .library(name: "TextToSpeechV1", targets: ["TextToSpeechV1"])
+
+package.products.append(SpeechToTextV1Library)
+package.products.append(TextToSpeechV1Library)
+
+let SpeechToTextV1Target: Target = .target(name: "SpeechToTextV1", dependencies: ["RestKit", "libogg", "libopus"])
+let SpeechToTextV1TestTarget: Target = .testTarget(name: "SpeechToTextV1Tests", dependencies: ["SpeechToTextV1"])
+let TextToSpeechV1Target: Target = .target(name: "TextToSpeechV1", dependencies: ["RestKit", "libogg", "libopus"])
+let TextToSpeechV1TestTarget: Target = .testTarget(name: "TextToSpeechV1Tests", dependencies: ["TextToSpeechV1"])
+
+package.targets.append(SpeechToTextV1Target)
+package.targets.append(SpeechToTextV1TestTarget)
+package.targets.append(TextToSpeechV1Target)
+package.targets.append(TextToSpeechV1TestTarget)
+#endif
